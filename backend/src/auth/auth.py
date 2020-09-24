@@ -5,19 +5,10 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-# AUTH0_DOMAIN = 'udacity-fsnd.auth0.com'
-# ALGORITHMS = ['RS256']
-# API_AUDIENCE = 'dev'
-
-# https://spskelly.us.auth0.com/authorize?
-# audience=http://localhost:5000
-# &response_type=token&
-# client_id=4VZgmO8D9NzovFgJrBn1e9DcBkA36h1Z&
-# redirect_uri=http://localhost:8100
-
 AUTH0_DOMAIN = 'spskelly.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'http://localhost:5000'
+
 #
 # Token for Barista: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJjLWY2dGdsenFrdllXWDN3YVBkMCJ9.eyJpc3MiOiJodHRwczovL3Nwc2tlbGx5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjVkNmI5NzVmZWE3NjAwNmIwOGI5NWQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUwMDAiLCJpYXQiOjE2MDA5MDMyNDQsImV4cCI6MTYwMDkxMDQ0NCwiYXpwIjoiNFZaZ21POEQ5TnpvdkZnSnJCbjFlOURjQmtBMzZoMVoiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImdldDpkcmlua3MtZGV0YWlsIl19.pOQCs466LidTFI_-Cl3tluJ7p8Li5m-JXwh1fFLcs8NMG9Dhs0zdZg42GPSFGKn5dALQV5JTbZ4g5Fn2OuSWpe9Nnj4hJfWgMLVBSGGLuvg06_j9NCHDCCOqjG5dFm-WQDTYUrrpYlh7I4Rbif6PZUCmMRucKFeiBBjjZcxgR_fImb8qau0pAecn1WnvOOExvCmMrR9yrat13SPaqsJF_ctEG68259kXqUf32IuUc7F21D5Ku463mr9v8XDZkoW7idyR0N2QiXMT4qlk51DwZQSBHCn4r3GX-1xifLOnxzyY7rbCTXzEgHfKoYOUwrI2jm-v9cusdss6G7g_QXEvAg
 # http://localhost:8100/
@@ -28,7 +19,6 @@ API_AUDIENCE = 'http://localhost:5000'
 
 # Token for random user: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJjLWY2dGdsenFrdllXWDN3YVBkMCJ9.eyJpc3MiOiJodHRwczovL3Nwc2tlbGx5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjZiZDFiZmE1MTFmZTAwNmI3ODliZjQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUwMDAiLCJpYXQiOjE2MDA5MDE1NzEsImV4cCI6MTYwMDkwODc3MSwiYXpwIjoiMnhxQ1o2ZFo5ekVWZ0U3a2NVUzM3aXkweGh1eW9hRjMiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbXX0.otnFZjWldw7Xfdb7b24gfhPbLUDTDjP9YKHP9tRfP1TDXprUL282EX1ffikSHHJe_T8Ru5lzMQlFL3q7MLSOXPd_yMhTkrMrKhdtSMVYEfX3YTjym5j0tnvYQVvbRVrqSlQrs2fIEB0qP1yimjXoJ-1dx1gpXuLaLklIq6BM9g9bGf4-C3gzsyT4rje-gPjpxmpccfkjfQNPz4AAaKsdjkARNxBYEPUXx5Wfm_aIxAyHzxpz-Rsw4F4-cdMkN8PvMkAD6pCK8N1N25vy51K2BEFNmWupz0DEth4VTd8ROIuDyMo9txdWljwU7VWvhdcfk8eyNfr-ZVGw_AmNIVUE-A
 # http://localhost:8100/#access_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJjLWY2dGdsenFrdllXWDN3YVBkMCJ9.eyJpc3MiOiJodHRwczovL3Nwc2tlbGx5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjZiZDFiZmE1MTFmZTAwNmI3ODliZjQiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUwMDAiLCJpYXQiOjE2MDA5MDE1NzEsImV4cCI6MTYwMDkwODc3MSwiYXpwIjoiMnhxQ1o2ZFo5ekVWZ0U3a2NVUzM3aXkweGh1eW9hRjMiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbXX0.otnFZjWldw7Xfdb7b24gfhPbLUDTDjP9YKHP9tRfP1TDXprUL282EX1ffikSHHJe_T8Ru5lzMQlFL3q7MLSOXPd_yMhTkrMrKhdtSMVYEfX3YTjym5j0tnvYQVvbRVrqSlQrs2fIEB0qP1yimjXoJ-1dx1gpXuLaLklIq6BM9g9bGf4-C3gzsyT4rje-gPjpxmpccfkjfQNPz4AAaKsdjkARNxBYEPUXx5Wfm_aIxAyHzxpz-Rsw4F4-cdMkN8PvMkAD6pCK8N1N25vy51K2BEFNmWupz0DEth4VTd8ROIuDyMo9txdWljwU7VWvhdcfk8eyNfr-ZVGw_AmNIVUE-A&expires_in=7200&token_type=Bearer
-
 
 
 ## AuthError Exception
@@ -53,8 +43,6 @@ Raises an AuthError if the header is malformed.
 When successful, returns the token part of the header
 '''
 def get_token_auth_header():
-    print(" in get_token_auth_header")
-    print("before doing anything")
     try:
         # attempt to get the header from the request
         auth_headers = request.headers['Authorization']
@@ -63,32 +51,27 @@ def get_token_auth_header():
     except:
         # raise an AuthError if no header is present
         if request.headers is None:
-            print("No header?")
             raise AuthError({
             'code': 'no_request_header',
             'description': 'There is no header on this request.'
             }, 401)
         if 'Authorization' not in request.headers:
-            print("No authorization in header?")
             raise AuthError({
             'code': 'no_auth_in_header',
             'description': 'No authorization details in request header.'
             }, 401)
         # raise an AuthError if the header is malformed
         if len(header_parts) != 2:
-            print("Too many parts in header!")
             raise AuthError({
             'code': 'too_many_parts',
             'description': 'Too many parts to Auth header.'
             }, 401)
         if header_parts[0].lower() != 'bearer':
-            print("No bearer in header!")
             raise AuthError({
             'code': 'no_bearer_tag',
             'description': 'Bearer tag not present or malformed.'
             }, 401)
     # return the token part of the header
-    print("payload is " , header_parts[1])
     return(header_parts[1])
 
 '''
@@ -102,14 +85,13 @@ check_permissions(permission, payload)
     returns true otherwise
 '''
 def check_permissions(permission, payload):
-    # raise Exception('Not Implemented')
      # raise an AuthError if permissions are not included in the payload
     if 'permissions' not in payload:
         raise AuthError({
                             'code': 'invalid_claims',
                             'description': 'Permissions not included in JWT.'
                         }, 400)
-# raise an AuthError if the requested permission string is not in the payload permissions array
+    # raise an AuthError if the requested permission string is not in the payload permissions array
     if permission not in payload['permissions']:
         raise AuthError({
                         'code': 'unauthorized',
@@ -133,9 +115,9 @@ verify_decode_jwt(token) method
 def verify_decode_jwt(token):
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
-    # GET THE DATA IN THE HEADER
+    #Get Header
     unverified_header = jwt.get_unverified_header(token)
-    # CHOOSE OUR KEY
+    # Whats the key?
     rsa_key = {}
     # check it is an Auth0 token with key id (kid)
     if 'kid' not in unverified_header:
@@ -154,11 +136,11 @@ def verify_decode_jwt(token):
                 'n': key['n'],
                 'e': key['e']
             }
-    # Finally, verify!!!
+    # What do we have here?
     if rsa_key:
         # validate the claims
         try:
-            # USE THE KEY TO VALIDATE THE JWT
+            # Decode the jwt
             payload = jwt.decode(
                 token,
                 rsa_key,
@@ -203,13 +185,7 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
-            # try:
             payload = verify_decode_jwt(token)
-            # except:
-            #     raise AuthError({
-            #                         'code': 'invalid_token',
-            #                         'description': 'Invalid token.'
-            #                     }, 401)
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
 
